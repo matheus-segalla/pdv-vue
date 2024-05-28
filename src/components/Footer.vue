@@ -3,6 +3,7 @@
         <p>BENEVIS MATERIAIS PARA CONSTRUÇÂO</p>
     </footer>
 </template>
+
 <script>
 export default {
     name: "Footer"
@@ -11,7 +12,7 @@ export default {
 
 <style>
 #footer {
-    height: 200px;
+    height: 100px;
     background-color: #222;
     border-top: 4px solid #111;
     color: #FCBA03;
