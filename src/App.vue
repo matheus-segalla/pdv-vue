@@ -1,13 +1,6 @@
 <template>
   <Navbar :logo="logo_src" :alt="app_name"/>
   <router-view/>
-  <div class="main-container">
-      <h1>PRODUTOS</h1>
-      <input ref="newproduct" placeholder="Novo Produto" type="text">
-      <button @click="addNewProduct">Adicionar</button>
-      <div> v-for="Produtos in products"</div>
-      <input v-model="products.Preço" type="text">
-    </div>
   <Footer />
 </template>
 
