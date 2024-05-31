@@ -1,6 +1,13 @@
 <template>
   <Navbar :logo="logo_src" :alt="app_name"/>
   <router-view/>
+  <div class="main-container">
+      <h1>PRODUTOS</h1>
+      <input ref="newproduct" placeholder="Novo Produto" type="text">
+      <button @click="addNewProduct">Adicionar</button>
+      <div> v-for="Produtos in products"</div>
+      <input v-model="products.Preço" type="text">
+    </div>
   <Footer />
 </template>
 
@@ -8,17 +15,60 @@
 import Navbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
 
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import {getFirestore, onSnapshot, collection, doc, dleteDoc, setDoc, addDoc, orderBy, query} from 'firebase/firestore';
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAt67DCLAHtPgkR16aLyxcYAIoqSMXBbCs",
+  authDomain: "benevis-pdv.firebaseapp.com",
+  projectId: "benevis-pdv",
+  storageBucket: "benevis-pdv.appspot.com",
+  messagingSenderId: "516414116841",
+  appId: "1:516414116841:web:440a688b421f8492387178",
+  measurementId: "G-PKVNHX30BF"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getFirestore(app);
+
 export default {
   components: {
     Navbar,
     Footer
+  },
+  methods: {
+    addNewProduct: function(){
+        addDoc(collection(db, 'produtos'),{
+          Preço:this.$refs.newproduct.value,
+        });
+      }
+  },
+  mounted(){
+const latestQuerry = querry(collection(db, "produtos"));
+onSnapshot(latestQuerry, (Snapshot)=>{
+  this.products = Snapshot.docs.map((doc) => {
+    return{
+      Preço:doc.data(Preço),
+    }
+  })
+})
   },
   data(){
     return{
       logo_src: "/img/logo.png",
       app_name: "Faça seu pedido"
     }
-  }
+  },
+ 
 }
 </script>
 <style>
