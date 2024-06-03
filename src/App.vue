@@ -34,27 +34,17 @@ const analytics = getAnalytics(app);
 const db = getFirestore(app);
 
 export default {
+  name: 'App',
   components: {
     Navbar,
     Footer
   },
-  methods: {
-    addNewProduct: function(){
-        addDoc(collection(db, 'produtos'),{
-          Preço:this.$refs.newproduct.value,
-        });
-      }
-  },
-  mounted(){
-const latestQuerry = querry(collection(db, "produtos"));
-onSnapshot(latestQuerry, (Snapshot)=>{
-  this.products = Snapshot.docs.map((doc) => {
-    return{
-      Preço:doc.data(Preço),
+  provide(){
+    return {
+      db
     }
-  })
-})
   },
+  
   data(){
     return{
       logo_src: "/img/logo.png",

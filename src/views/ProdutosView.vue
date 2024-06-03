@@ -1,58 +1,69 @@
 <template>
-    <div class="main-container">
-      <h1>PRODUTOS</h1>
-      <input ref="newproduct" placeholder="Novo Produto" type="text">
-      <button @click="addNewProduct">Adicionar</button>
-    <div>
-        <div class="card">
-            
-            <div class="card-body">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>NOME</th>
-                            <th>U.M.</th>
-                            <th>PREÇO</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
+   <div>
+    <h1>Adicionar Produto</h1>
+    <form
+    @submit.prevent="addProduct">
+    <input v-model="productName" placeholder="Nome do Produto"/>
+    <input v-model="productPrice" placeholder="Preço do Produto"/>
 
-                        </tr>
-                    </tbody>
-                </table>
-            </div>s
-        </div>
-    </div>
-</div>
+    <button type="submit">Adicionar Produto</button> 
+</form>
+<h2>Lista de Produtos</h2>
+<ul>
+    <li v-for="product in products" :key="product.id">
+    {{ product.name }} - R$ {{ product.price }}
+    </li>
+</ul>
+   </div>
   </template>
   
   <script>
-    import axios from 'axios';
-    import { RouterLink } from 'vue-router';
+    import { inject, onMounted, ref } from 'vue';
+    import { addDoc, collection, onSnapshot } from 'firebase/firestore';
 
-  export default {
-    name: 'produtos',
-    data(){
-        return {
-          produtos: []
-        }
-    },
-    mounted(){
-        this.getProduct();
-        // console.log('i am here')
-    },
+    export default {
+        name: 'AdicionarProdutos',
+        data(){
+            return {
+                productName: '',
+                productPrice: ''
+            };
+        },
+        setup(){
+            const db = inject('db');
+            const products = ref([]);
+            const productName = ref('');
+            const productPrice = ref('');
+            const addProduct = async () => {
+                try {
+                    await
+                    addDoc(collection(db, "produtos"), {
+                        name: productName.value,
+                        price: productPrice.value
+                    });
+                    productName.value = '';
+                    productPrice.value = '';
+                    alert("Produto adicionado com sucesso");
+                } catch (e) {
+                    console.error("Erro ao adicionar produto: ", e);
+                    alert("Erro ao adicionar protudo.");
+                }
+            };
 
-    methods: {
-        getProduct(){
-
-            axios.get('').then(res =>{
-                console.timeLog(res)
+            onMounted(() => {
+                const unsubscribe = onSnapshot(collection(db,"produtos"), (snapshot) =>{
+                    products.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));  
+                });
+                return () => unsubscribe();
             });
+            return {
+                productName,
+                productPrice,
+                addProduct,
+                products
+            };
         }
-    }
-  }
+    };
   
   </script>
   
