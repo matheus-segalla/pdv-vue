@@ -1,19 +1,36 @@
 <template>
-   <div>
+   <div class="container mt-5">
     <h1>Adicionar Produto</h1>
     <form
-    @submit.prevent="addProduct">
-    <input v-model="productName" placeholder="Nome do Produto"/>
-    <input v-model="productPrice" placeholder="Preço do Produto"/>
-
-    <button type="submit">Adicionar Produto</button> 
-</form>
+    @submit.prevent="addProduct" class="mb-4">
+    <div class="row g-3 align-items-center">
+        <div class="col-md-6">
+            <input v-model="productName" class="form-control" placeholder="Nome do Produto"/>
+        </div>
+        <div class="col-md-4">
+            <input v-model="productPrice" class="form-control" placeholder="Preço do Produto"/>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Adicionar Produto</button>
+        </div>
+    </div>
+    
+    </form>
 <h2>Lista de Produtos</h2>
-<ul>
-    <li v-for="product in products" :key="product.id">
-    {{ product.name }} - R$ {{ product.price }}
-    </li>
-</ul>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Produto</th>
+            <th scope="col">Preço UN</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr v-for="product in products" :key="product.id">
+        <td>{{ product.name }}</td>
+        <td>R${{ product.price }}</td>
+    </tr>
+    </tbody>
+</table>
    </div>
   </template>
   
