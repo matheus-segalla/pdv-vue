@@ -21,7 +21,7 @@
         <div class="col-md-2">
           <input v-model="clientState" class="form-control" placeholder="Estado" required />
         </div>
-        <div class="col-md-2">
+        <div class="col-md-6">
           <button type="submit" class="btn btn-primary w-100">Adicionar Cliente</button>
         </div>
       </div>

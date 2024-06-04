@@ -6,8 +6,11 @@
           <div class="col-md-6">
             <input v-model="productName" class="form-control" placeholder="Nome do Produto" />
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <input v-model="productPrice" class="form-control" placeholder="Preço do Produto" />
+          </div>
+          <div class="col-md-3">
+            <input v-model="productUnidade" class="form-control" placeholder="Unidade de medida" />
           </div>
           <div class="col-md-2">
             <button type="submit" class="btn btn-primary w-100">Adicionar Produto</button>
@@ -23,12 +26,14 @@
           <tr>
             <th scope="col">Nome</th>
             <th scope="col">Preço</th>
+            <th scope="col">UM</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="product in filteredProducts" :key="product.id">
             <td>{{ product.name }}</td>
             <td>R$ {{ product.price }}</td>
+            <td>{{ product.unidade }}</td>
           </tr>
         </tbody>
       </table>
@@ -46,16 +51,19 @@
       const products = ref([]);
       const productName = ref('');
       const productPrice = ref('');
+      const productUnidade = ref('');
       const searchQuery = ref('');
   
       const addProduct = async () => {
         try {
           await addDoc(collection(db, "produtos"), {
             name: productName.value,
-            price: productPrice.value
+            price: productPrice.value,
+            unidade: productUnidade.value
           });
           productName.value = '';
           productPrice.value = '';
+          productUnidade.value = '';
           alert("Produto adicionado com sucesso!");
         } catch (e) {
           console.error("Erro ao adicionar produto: ", e);
@@ -86,6 +94,7 @@
       return {
         productName,
         productPrice,
+        productUnidade,
         addProduct,
         searchQuery,
         filteredProducts
